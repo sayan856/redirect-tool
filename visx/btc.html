@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>لوحة متابعة الذهب - ماجد اليافعي</title>
+
+<style>
+    :root {
+        --bg: #050505;
+        --card: rgba(255, 255, 255, 0.075);
+        --card2: rgba(0, 0, 0, 0.28);
+        --gold: #ffd36a;
+        --gold2: #ffad18;
+        --text: #ffffff;
+        --muted: #a8a8a8;
+        --green: #31d27c;
+        --red: #ff5c5c;
+        --blue: #75bfff;
+        --border: rgba(255, 211, 106, 0.22);
+    }
+
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        font-family: Tahoma, Arial, sans-serif;
+        background:
+            radial-gradient(circle at top right, rgba(255, 180, 35, 0.18), transparent 32%),
+            radial-gradient(circle at bottom left, rgba(255, 211, 106, 0.10), transparent 35%),
+            linear-gradient(135deg, #050505, #171107, #000);
+        color: var(--text);
+        min-height: 100vh;
+    }
+
+    header {
+        text-align: center;
+        padding: 35px 16px 20px;
+    }
+
+    .badge {
+        display: inline-block;
+        padding: 8px 16px;
+        border-radius: 999px;
+        color: var(--gold);
+        border: 1px solid var(--border);
+        background: rgba(255, 255, 255, 0.05);
+        font-size: 14px;
+        margin-bottom: 14px;
+    }
+
+    h1 {
+        margin: 0;
+        font-size: clamp(28px, 5vw, 46px);
+        line-height: 1.5;
+        background: linear-gradient(90deg, #fff3bf, var(--gold2), #ffffff);
+        -webkit-background-clip: text;
+        color: transparent;
+    }
+
+    .subtitle {
+        color: var(--muted);
+        margin-top: 8px;
+        font-size: 15px;
+    }
+
+    .dashboard {
+        width: min(1250px, 94%);
+        margin: 20px auto;
+    }
+
+    .summary-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 14px;
+        margin-bottom: 18px;
+    }
+
+    .card,
+    .panel,
+    .memo,
+    .market-card {
+        background: var(--card);
+        border: 1px solid rgba(255, 255, 255, 0.09);
+        border-radius: 22px;
+        box-shadow: 0 18px 45px rgba(0, 0, 0, 0.36);
+        backdrop-filter: blur(14px);
+    }
+
+    .card {
+        padding: 18px;
+        min-height: 125px;
+        position: relative;
+        overflow: hidden;
+        animation: rise 0.7s ease both;
+    }
+
+    .card::before {
+        content: "";
+        position: absolute;
+        width: 140px;
+        height: 140px;
+        border-radius: 50%;
+        background: rgba(255, 211, 106, 0.16);
+        top: -70px;
+        left: -70px;
+    }
+
+    .card-label {
+        color: var(--muted);
+        font-size: 14px;
+        margin-bottom: 10px;
+    }
+
+    .card-value {
+        font-size: 23px;
+        font-weight: bold;
+        direction: ltr;
+        text-align: right;
+    }
+
+    .card-note {
+        margin-top: 8px;
+        font-size: 12px;
+        color: var(--gold);
+    }
+
+    .memo {
+        padding: 20px;
+        margin-bottom: 18px;
+    }
+
+    .memo h2,
+    .panel h2 {
+        margin: 0 0 15px;
+        color: var(--gold);
+        font-size: 22px;
+    }
+
+    .memo-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+    }
+
+    .memo-item {
+        padding: 14px;
+        background: var(--card2);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 16px;
+    }
+
+    .memo-item span {
+        display: block;
+        color: var(--muted);
+        font-size: 13px;
+        margin-bottom: 8px;
+    }
+
+    .memo-item strong {
+        display: block;
+        line-height: 1.7;
+        font-size: 16px;
+    }
+
+    .explain {
+        margin-top: 14px;
+        padding: 15px;
+        border-radius: 16px;
+        background: rgba(255, 173, 24, 0.10);
+        border: 1px solid rgba(255, 211, 106, 0.18);
+        color: #ffe8a6;
+        line-height: 1.9;
+        font-size: 13px;
+    }
+
+    .main-grid {
+        display: grid;
+        grid-template-columns: 430px 1fr;
+        gap: 18px;
+        align-items: start;
+    }
+
+    .panel {
+        padding: 20px;
+        position: sticky;
+        top: 15px;
+    }
+
+    .title-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 15px;
+    }
+
+    .title-row h2 {
+        margin: 0;
+    }
+
+    .title-row small {
+        color: var(--muted);
+        font-size: 12px;
+    }
+
+    .form-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+    }
+
+    .field {
+        display: flex;
+        flex-direction: column;
+        gap: 7px;
+    }
+
+    label {
+        color: #dddddd;
+        font-size: 13px;
+    }
+
+    input {
+        width: 100%;
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        border-radius: 14px;
+        padding: 12px;
+        outline: none;
+        background: rgba(0, 0, 0, 0.34);
+        color: #fff;
+        font-size: 15px;
+    }
+
+    input:focus {
+        border-color: var(--gold);
+        box-shadow: 0 0 0 4px rgba(255, 211, 106, 0.11);
+    }
+
+    .result-box {
+        margin-top: 16px;
+        padding: 15px;
+        border-radius: 18px;
+        background: var(--card2);
+        border: 1px solid rgba(255, 211, 106, 0.15);
+    }
+
+    .result-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        padding: 10px 0;
+        border-bottom: 1px dashed rgba(255, 255, 255, 0.12);
+        font-size: 14px;
+    }
+
+    .result-row:last-child {
+        border-bottom: none;
+    }
+
+    .result-row strong {
+        direction: ltr;
+        text-align: left;
+    }
+
+    .positive {
+        color: var(--green);
+    }
+
+    .negative {
+        color: var(--red);
+    }
+
+    .neutral {
+        color: var(--blue);
+    }
+
+    .buttons {
+        display: flex;
+        gap: 10px;
+        margin-top: 15px;
+    }
+
+    button {
+        flex: 1;
+        border: none;
+        border-radius: 14px;
+        padding: 12px;
+        font-weight: bold;
+        cursor: pointer;
+        color: #111;
+        background: linear-gradient(135deg, var(--gold), var(--gold2));
+        transition: 0.2s;
+    }
+
+    button.secondary {
+        color: #fff;
+        background: rgba(255, 255, 255, 0.09);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    button:hover {
+        transform: translateY(-2px);
+        filter: brightness(1.08);
+    }
+
+    .note {
+        margin-top: 13px;
+        color: var(--muted);
+        line-height: 1.9;
+        font-size: 13px;
+    }
+
+    .market-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 18px;
+    }
+
+    .market-card {
+        overflow: hidden;
+        animation: rise 0.7s ease both;
+    }
+
+    .market-card.full {
+        grid-column: 1 / -1;
+    }
+
+    .market-head {
+        padding: 16px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .market-head h2 {
+        margin: 0;
+        font-size: 18px;
+        color: var(--gold);
+    }
+
+    .market-head small {
+        color: var(--muted);
+    }
+
+    iframe {
+        width: 100%;
+        height: 420px;
+        border: none;
+        display: block;
+        background: #111;
+    }
+
+    footer {
+        text-align: center;
+        color: #777;
+        padding: 30px 15px;
+        font-size: 14px;
+    }
+
+    @keyframes rise {
+        from {
+            opacity: 0;
+            transform: translateY(25px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @media (max-width: 1050px) {
+        .summary-grid,
+        .memo-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .main-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .panel {
+            position: static;
+        }
+    }
+
+    @media (max-width: 650px) {
+        .summary-grid,
+        .memo-grid,
+        .form-grid,
+        .market-grid {
+            grid-template-columns: 1fr;
+        }
+
+        iframe {
+            height: 360px;
+        }
+
+        .card-value {
+            font-size: 21px;
+        }
+    }
+
+    @media print {
+        body {
+            background: #111;
+        }
+
+        iframe,
+        .buttons {
+            display: none;
+        }
+
+        .panel {
+            position: static;
+        }
+    }
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="badge">🟡 ذهب عيار 24 · متابعة بسعر البنك التقريبي</div>
+    <h1>لوحة متابعة الذهب والأسعار العالمية</h1>
+    <p class="subtitle">توثيق الشراء، متوسط التكلفة، والقيمة التقديرية حسب فارق البنك لكل جرام</p>
+</header>
+
+<main class="dashboard">
+
+    <section class="summary-grid">
+        <div class="card">
+            <div class="card-label">إجمالي وزن الذهب</div>
+            <div class="card-value" id="totalGramsCard">0 جرام</div>
+            <div class="card-note">150 جرام + 2 أونصة</div>
+        </div>
+
+        <div class="card">
+            <div class="card-label">متوسط الشراء</div>
+            <div class="card-value" id="avgBuyCard">0 ر.س/جرام</div>
+            <div class="card-note" id="avgBuyUsdCard">0 دولار/جرام</div>
+        </div>
+
+        <div class="card">
+            <div class="card-label">إجمالي تكلفة الشراء</div>
+            <div class="card-value" id="buyTotalCard">0 ر.س</div>
+            <div class="card-note" id="buyTotalUsdCard">0 دولار</div>
+        </div>
+
+        <div class="card">
+            <div class="card-label">الفرق التقديري عند البيع</div>
+            <div class="card-value" id="differenceCard">0 ر.س</div>
+            <div class="card-note">بعد خصم فارق البنك لكل جرام</div>
+        </div>
+    </section>
+
+    <section class="memo">
+        <h2>📌 معلومات شراء للتذكير</h2>
+
+        <div class="memo-grid">
+            <div class="memo-item">
+                <span>شراء 150 جرام</span>
+                <strong id="memoBars">150 جرام × 521 ر.س</strong>
+            </div>
+
+            <div class="memo-item">
+                <span>شراء الأونصتين</span>
+                <strong id="memoOunces">2 أونصة × 10,250 ر.س</strong>
+            </div>
+
+            <div class="memo-item">
+                <span>إجمالي الشراء</span>
+                <strong id="memoTotal">98,650 ر.س</strong>
+            </div>
+
+            <div class="memo-item">
+                <span>ما يعادل 150 جرام بالدولار</span>
+                <strong id="memoBarsUsd">0 دولار</strong>
+            </div>
+
+            <div class="memo-item">
+                <span>ما يعادل الأونصتين بالدولار</span>
+                <strong id="memoOuncesUsd">0 دولار</strong>
+            </div>
+
+            <div class="memo-item">
+                <span>متوسط الشراء الحقيقي</span>
+                <strong id="memoAvg">0 ر.س للجرام</strong>
+            </div>
+        </div>
+
+        <div class="explain">
+            طريقة الحساب في هذه الصفحة: يتم تحويل سعر الأونصة العالمي من الدولار إلى ريال للجرام، ثم يتم خصم فارق البنك، مثل 30 أو 31 ريال لكل جرام، للوصول إلى سعر البيع التقديري لو بعت الذهب للبنك أو السوق. لذلك خانة الفرق ليست ربحًا مؤكدًا، لكنها تقدير قريب حسب السعر الذي تدخله وفارق البنك.
+        </div>
+    </section>
+
+    <section class="main-grid">
+
+        <aside class="panel">
+            <div class="title-row">
+                <h2>🧮 حاسبة الذهب</h2>
+                <small id="lastUpdate">--</small>
+            </div>
+
+            <div class="form-grid">
+                <div class="field">
+                    <label>وزن السبائك بالجرام</label>
+                    <input type="number" id="barsGram" value="150" step="0.01">
+                </div>
+
+                <div class="field">
+                    <label>سعر شراء جرام السبائك / ريال</label>
+                    <input type="number" id="barsBuySarGram" value="521" step="0.01">
+                </div>
+
+                <div class="field">
+                    <label>عدد الأونصات</label>
+                    <input type="number" id="ounceCount" value="2" step="1">
+                </div>
+
+                <div class="field">
+                    <label>وزن الأونصة بالجرام</label>
+                    <input type="number" id="ounceGram" value="31.1" step="0.001">
+                </div>
+
+                <div class="field">
+                    <label>سعر شراء الأونصة الواحدة / ريال</label>
+                    <input type="number" id="ounceBuySar" value="10250" step="0.01">
+                </div>
+
+                <div class="field">
+                    <label>سعر الدولار مقابل الريال السعودي</label>
+                    <input type="number" id="usdToSar" value="3.80" step="0.01">
+                </div>
+
+                <div class="field">
+                    <label>سعر أونصة الذهب العالمي الآن / دولار</label>
+                    <input type="number" id="xauUsd" value="3400" step="0.01">
+                </div>
+
+                <div class="field">
+                    <label>فارق البنك لكل جرام / ريال</label>
+                    <input type="number" id="bankSpreadSarGram" value="31" step="0.01">
+                </div>
+            </div>
+
+            <div class="result-box">
+                <div class="result-row">
+                    <span>تكلفة 150 جرام</span>
+                    <strong id="barsCost">0 ر.س</strong>
+                </div>
+
+                <div class="result-row">
+                    <span>تكلفة الأونصتين</span>
+                    <strong id="ouncesCost">0 ر.س</strong>
+                </div>
+
+                <div class="result-row">
+                    <span>إجمالي وزن الذهب</span>
+                    <strong id="totalGrams">0 جرام</strong>
+                </div>
+
+                <div class="result-row">
+                    <span>إجمالي الشراء</span>
+                    <strong id="buyTotal">0 ر.س</strong>
+                </div>
+
+                <div class="result-row">
+                    <span>متوسط الشراء</span>
+                    <strong id="avgBuy">0 ر.س/جرام</strong>
+                </div>
+
+                <div class="result-row">
+                    <span>سعر الجرام العالمي بالريال</span>
+                    <strong id="globalGramSar">0 ر.س</strong>
+                </div>
+
+                <div class="result-row">
+                    <span>فارق البنك لكل جرام</span>
+                    <strong id="spreadShown">0 ر.س</strong>
+                </div>
+
+                <div class="result-row">
+                    <span>سعر البيع التقديري للجرام</span>
+                    <strong id="bankBuyGramSar">0 ر.س</strong>
+                </div>
+
+                <div class="result-row">
+                    <span>القيمة التقديرية عند البيع</span>
+                    <strong id="estimatedSellValue">0 ر.س</strong>
+                </div>
+
+                <div class="result-row">
+                    <span>الفرق التقديري</span>
+                    <strong id="differenceValue">0 ر.س</strong>
+                </div>
+
+                <div class="result-row">
+                    <span>سعر الأونصة المطلوب للتعادل</span>
+                    <strong id="breakEvenOunce">0 دولار</strong>
+                </div>
+            </div>
+
+            <div class="buttons">
+                <button onclick="calculateGold()">تحديث الحساب</button>
+                <button class="secondary" onclick="window.print()">طباعة التقرير</button>
+            </div>
+
+            <p class="note">
+                بطاقة TradingView في الجهة اليمنى للمشاهدة فقط. أدخل سعر الأونصة العالمي يدويًا في الحاسبة، ثم ضع فارق البنك 30 أو 31 ريال لكل جرام حسب السعر الفعلي عندك.
+            </p>
+        </aside>
+
+        <section class="market-grid">
+            <div class="market-card full">
+                <div class="market-head">
+                    <h2>🟡 سعر أونصة الذهب XAU/USD</h2>
+                    <small>انسخ السعر يدويًا إلى الحاسبة</small>
+                </div>
+                <iframe src="https://s.tradingview.com/embed-widget/mini-symbol-overview/?symbol=XAUUSD&locale=ar"></iframe>
+            </div>
+
+            <div class="market-card">
+                <div class="market-head">
+                    <h2>💶 اليورو مقابل الدولار</h2>
+                    <small>EUR/USD</small>
+                </div>
+                <iframe src="https://s.tradingview.com/embed-widget/mini-symbol-overview/?symbol=EURUSD&locale=ar"></iframe>
+            </div>
+
+            <div class="market-card">
+                <div class="market-head">
+                    <h2>₿ البيتكوين مقابل الدولار</h2>
+                    <small>BTC/USD</small>
+                </div>
+                <iframe src="https://s.tradingview.com/embed-widget/mini-symbol-overview/?symbol=BTCUSD&locale=ar"></iframe>
+            </div>
+        </section>
+
+    </section>
+
+</main>
+
+<footer>
+    تصميم وتطوير بواسطة ماجد اليافعي © <span id="year"></span>
+</footer>
+
+<script>
+    const inputs = [
+        "barsGram",
+        "barsBuySarGram",
+        "ounceCount",
+        "ounceGram",
+        "ounceBuySar",
+        "usdToSar",
+        "xauUsd",
+        "bankSpreadSarGram"
+    ];
+
+    function numberValue(id) {
+        const value = parseFloat(document.getElementById(id).value);
+        return isNaN(value) ? 0 : value;
+    }
+
+    function formatNumber(value, digits = 2) {
+        return new Intl.NumberFormat("ar-SA", {
+            minimumFractionDigits: digits,
+            maximumFractionDigits: digits
+        }).format(value);
+    }
+
+    function formatSar(value) {
+        return `${formatNumber(value)} ر.س`;
+    }
+
+    function formatUsd(value) {
+        return `${formatNumber(value)} دولار`;
+    }
+
+    function setText(id, value) {
+        document.getElementById(id).textContent = value;
+    }
+
+    function setDifferenceStyle(element, value) {
+        element.classList.remove("positive", "negative", "neutral");
+
+        if (value > 0) {
+            element.classList.add("positive");
+        } else if (value < 0) {
+            element.classList.add("negative");
+        } else {
+            element.classList.add("neutral");
+        }
+    }
+
+    function saveSettings() {
+        const data = {};
+
+        inputs.forEach(id => {
+            data[id] = document.getElementById(id).value;
+        });
+
+        localStorage.setItem("majidGoldDashboardBankSpread", JSON.stringify(data));
+    }
+
+    function loadSettings() {
+        const saved = localStorage.getItem("majidGoldDashboardBankSpread");
+
+        if (!saved) return;
+
+        try {
+            const data = JSON.parse(saved);
+
+            inputs.forEach(id => {
+                if (data[id] !== undefined) {
+                    document.getElementById(id).value = data[id];
+                }
+            });
+        } catch (error) {
+            console.log("لم يتم تحميل الإعدادات السابقة");
+        }
+    }
+
+    function calculateGold() {
+        const barsGram = numberValue("barsGram");
+        const barsBuySarGram = numberValue("barsBuySarGram");
+        const ounceCount = numberValue("ounceCount");
+        const ounceGram = numberValue("ounceGram");
+        const ounceBuySar = numberValue("ounceBuySar");
+        const usdToSar = numberValue("usdToSar");
+        const xauUsd = numberValue("xauUsd");
+        const bankSpreadSarGram = numberValue("bankSpreadSarGram");
+
+        // توثيق الشراء
+        const barsCost = barsGram * barsBuySarGram;
+        const ouncesWeight = ounceCount * ounceGram;
+        const ouncesCost = ounceCount * ounceBuySar;
+        const totalGrams = barsGram + ouncesWeight;
+        const buyTotal = barsCost + ouncesCost;
+
+        const barsCostUsd = usdToSar > 0 ? barsCost / usdToSar : 0;
+        const ouncesCostUsd = usdToSar > 0 ? ouncesCost / usdToSar : 0;
+        const totalBuyUsd = usdToSar > 0 ? buyTotal / usdToSar : 0;
+
+        const avgBuySarGram = totalGrams > 0 ? buyTotal / totalGrams : 0;
+        const avgBuyUsdGram = usdToSar > 0 ? avgBuySarGram / usdToSar : 0;
+
+        // السعر الحالي حسب سعر الأونصة العالمي
+        const globalGramUsd = ounceGram > 0 ? xauUsd / ounceGram : 0;
+        const globalGramSar = globalGramUsd * usdToSar;
+
+        // المقياس الصحيح: خصم فارق البنك بالريال لكل جرام
+        const bankBuyGramSar = Math.max(globalGramSar - bankSpreadSarGram, 0);
+
+        const estimatedSellValue = totalGrams * bankBuyGramSar;
+        const difference = estimatedSellValue - buyTotal;
+
+        // سعر الأونصة المطلوب حتى تصل لنقطة التعادل بعد خصم فارق البنك
+        const breakEvenOunceUsd = usdToSar > 0
+            ? ((avgBuySarGram + bankSpreadSarGram) * ounceGram) / usdToSar
+            : 0;
+
+        setText("barsCost", formatSar(barsCost));
+        setText("ouncesCost", formatSar(ouncesCost));
+        setText("totalGrams", `${formatNumber(totalGrams, 3)} جرام`);
+        setText("buyTotal", formatSar(buyTotal));
+        setText("avgBuy", `${formatNumber(avgBuySarGram)} ر.س/جرام`);
+        setText("globalGramSar", formatSar(globalGramSar));
+        setText("spreadShown", formatSar(bankSpreadSarGram));
+        setText("bankBuyGramSar", formatSar(bankBuyGramSar));
+        setText("estimatedSellValue", formatSar(estimatedSellValue));
+        setText("differenceValue", formatSar(difference));
+        setText("breakEvenOunce", formatUsd(breakEvenOunceUsd));
+
+        setText("totalGramsCard", `${formatNumber(totalGrams, 3)} جرام`);
+        setText("avgBuyCard", `${formatNumber(avgBuySarGram)} ر.س/جرام`);
+        setText("avgBuyUsdCard", `${formatNumber(avgBuyUsdGram)} دولار/جرام`);
+        setText("buyTotalCard", formatSar(buyTotal));
+        setText("buyTotalUsdCard", formatUsd(totalBuyUsd));
+        setText("differenceCard", formatSar(difference));
+
+        setText("memoBars", `${formatNumber(barsGram, 2)} جرام × ${formatNumber(barsBuySarGram)} ر.س = ${formatSar(barsCost)}`);
+        setText("memoOunces", `${formatNumber(ounceCount, 0)} أونصة × ${formatNumber(ounceBuySar)} ر.س = ${formatSar(ouncesCost)}`);
+        setText("memoTotal", `${formatSar(buyTotal)} = ${formatUsd(totalBuyUsd)}`);
+        setText("memoBarsUsd", `${formatUsd(barsCostUsd)} للـ ${formatNumber(barsGram, 2)} جرام`);
+        setText("memoOuncesUsd", `${formatUsd(ouncesCostUsd)} للأونصتين`);
+        setText("memoAvg", `${formatNumber(avgBuySarGram)} ر.س/جرام = ${formatNumber(avgBuyUsdGram)} دولار/جرام`);
+
+        setDifferenceStyle(document.getElementById("differenceValue"), difference);
+        setDifferenceStyle(document.getElementById("differenceCard"), difference);
+
+        setText("lastUpdate", new Date().toLocaleString("ar-SA"));
+        saveSettings();
+    }
+
+    inputs.forEach(id => {
+        document.getElementById(id).addEventListener("input", calculateGold);
+    });
+
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    loadSettings();
+    calculateGold();
+</script>
+
+</body>
+</html>
